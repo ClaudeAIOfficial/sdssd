@@ -1,0 +1,56 @@
+@import "tailwindcss";
+
+:root {
+  --background: #020617;
+  --foreground: #f8fafc;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif;
+}
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #334155 transparent;
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #334155;
+  border-radius: 9999px;
+}
+
+@keyframes drive {
+  0% {
+    transform: translateX(-10%) translateY(0);
+  }
+  100% {
+    transform: translateX(145vw) translateY(-8px);
+  }
+}
+
+@keyframes fly {
+  0% {
+    transform: translateX(-10%) translateY(0);
+  }
+  100% {
+    transform: translateX(130vw) translateY(12px);
+  }
+}
+
+.text-balance {
+  text-wrap: balance;
+}
