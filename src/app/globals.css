@@ -1,0 +1,100 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --font-display: "Bebas Neue", "Arial Narrow", sans-serif;
+  --font-body: "Inter", system-ui, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  background: #0a0612;
+  color: #f4ecff;
+  font-family: var(--font-body);
+  overflow-x: hidden;
+}
+
+/* Neon scrollbar */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+::-webkit-scrollbar-track {
+  background: rgba(20, 10, 36, 0.6);
+}
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #ff2d95, #7b2ff7);
+  border-radius: 999px;
+}
+
+@layer components {
+  .glass {
+    @apply bg-white/5 backdrop-blur-xl border border-white/10;
+  }
+  .glass-strong {
+    @apply bg-black/40 backdrop-blur-2xl border border-white/10;
+  }
+  .neon-text {
+    text-shadow: 0 0 10px rgba(255, 45, 149, 0.8), 0 0 28px rgba(217, 22, 255, 0.55);
+  }
+  .neon-cyan-text {
+    text-shadow: 0 0 10px rgba(34, 227, 255, 0.8), 0 0 24px rgba(34, 227, 255, 0.45);
+  }
+  .btn {
+    @apply relative inline-flex items-center justify-center gap-2 rounded-xl px-6 py-3 font-semibold tracking-wide transition-all duration-200 select-none;
+  }
+  .btn-primary {
+    @apply btn text-white bg-gradient-to-r from-gts-pink to-gts-purple shadow-neon hover:scale-[1.03] active:scale-95;
+  }
+  .btn-ghost {
+    @apply btn glass text-white/90 hover:bg-white/10 hover:scale-[1.02] active:scale-95;
+  }
+  .btn-cyan {
+    @apply btn text-black bg-gradient-to-r from-gts-cyan to-gts-teal shadow-cyan hover:scale-[1.03] active:scale-95;
+  }
+  .stat-chip {
+    @apply glass rounded-xl px-3 py-2 flex items-center gap-2 text-sm font-semibold;
+  }
+}
+
+/* Bebas Neue substitute display font via system fallback. The actual font is
+   loaded from Google Fonts in layout for a polished AAA-style heading. */
+.display-font {
+  font-family: var(--font-display);
+  letter-spacing: 0.04em;
+}
+
+/* Subtle animated grid for cyber backgrounds */
+.cyber-grid {
+  background-image:
+    linear-gradient(rgba(123, 47, 247, 0.12) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(34, 227, 255, 0.12) 1px, transparent 1px);
+  background-size: 40px 40px;
+}
+
+.scanlines::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: repeating-linear-gradient(
+    to bottom,
+    rgba(255, 255, 255, 0.03) 0px,
+    rgba(255, 255, 255, 0.03) 1px,
+    transparent 2px,
+    transparent 4px
+  );
+  mix-blend-mode: overlay;
+}
+
+.no-select {
+  user-select: none;
+  -webkit-user-select: none;
+}
