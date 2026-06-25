@@ -34,6 +34,7 @@ export default function PlayPage() {
   const hydrate = useGame((s) => s.hydrate);
   const ensureServerPlayer = useGame((s) => s.ensureServerPlayer);
   const started = useGame((s) => s.started);
+  const graphicsQuality = useGame((s) => s.graphicsQuality);
   useGameInput();
 
   useEffect(() => {
@@ -56,6 +57,10 @@ export default function PlayPage() {
       <LandmarkModal />
       <CharacterCreator />
       <Notifications />
+      <div
+        className="retro-post-overlay"
+        style={{ opacity: graphicsQuality === "low" ? 0.72 : graphicsQuality === "medium" ? 0.55 : 0.38 }}
+      />
 
       <StartOverlay show={!started} />
     </main>

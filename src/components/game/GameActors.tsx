@@ -48,10 +48,19 @@ export function Stepper() {
 
     const p = world.player;
 
-    // Chase camera — angled top-down following the player.
-    camTarget.current.set(p.x, 0, p.z);
-    const desired = new THREE.Vector3(p.x, 34, p.z + 20);
-    camera.position.lerp(desired, 1 - Math.pow(0.001, dt));
+    // Old-school GTA-style chase camera: angled top-down, smooth, and pulls
+    // slightly farther back as vehicle speed rises so driving has arcade drift.
+    const zoom = s.cameraZoom;
+    const speedPull = Math.min(14, p.speed * 0.34);
+    const backX = -Math.sin(p.heading) * speedPull;
+    const backZ = -Math.cos(p.heading) * speedPull;
+    camTarget.current.set(p.x + Math.sin(p.heading) * 4, 0.8, p.z + Math.cos(p.heading) * 4);
+    const desired = new THREE.Vector3(
+      p.x + backX,
+      (28 + speedPull * 0.45) * zoom,
+      p.z + 22 * zoom + backZ,
+    );
+    camera.position.lerp(desired, 1 - Math.pow(0.0008, dt));
     camera.lookAt(camTarget.current);
 
     // Mission progress.
@@ -117,7 +126,7 @@ export function PlayerActor() {
 
   return (
     <group ref={ref}>
-      <LowPolyCharacter appearance={appearance} phase={phase.current} moving />
+      <LowPolyCharacter appearance={appearance} phase={phase.current} moving role="player" />
       {/* Subtle neon ground glow under the player */}
       <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.05, 0]}>
         <ringGeometry args={[0.8, 1.1, 24]} />
@@ -162,19 +171,29 @@ export function Npcs() {
           <LowPolyCharacter
             appearance={{
               skin: n.color,
-              hair: "#1c1c1c",
-              hairStyle: i % 2 === 0 ? "short" : "buzz",
-              shirt: n.shirt,
-              pants: "#22304a",
+              hair: i % 7 === 0 ? "#d916ff" : i % 5 === 0 ? "#ffd23f" : "#1c1c1c",
+              hairStyle: i % 6 === 0 ? "mohawk" : i % 5 === 0 ? "afro" : i % 2 === 0 ? "short" : "buzz",
+              shirt: roleForNpc(i) === "police" ? "#102044" : roleForNpc(i) === "taxi" ? "#ffd23f" : roleForNpc(i) === "harbor" ? "#ff7a00" : roleForNpc(i) === "casino" ? "#191422" : n.shirt,
+              pants: roleForNpc(i) === "police" ? "#0a1022" : "#22304a",
               shoes: "#0a0612",
             }}
             phase={phases.current[i]}
             moving
+            role={roleForNpc(i)}
           />
         </group>
       ))}
     </>
   );
+}
+
+function roleForNpc(i: number) {
+  if (i % 13 === 0) return "police" as const;
+  if (i % 11 === 0) return "harbor" as const;
+  if (i % 7 === 0) return "gang" as const;
+  if (i % 5 === 0) return "casino" as const;
+  if (i % 4 === 0) return "taxi" as const;
+  return "civilian" as const;
 }
 
 export function PoliceUnits() {

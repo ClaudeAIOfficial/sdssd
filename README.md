@@ -18,6 +18,12 @@ code are original and generated procedurally.
 - **Living low-poly city** — streets on a grid, original buildings, gas station,
   bank, casino, beach, harbor, apartments, police station, warehouse, park,
   garage and a safehouse. Cars driving around, NPCs walking, full day/night cycle.
+- **Retro crime-city visual layer** — gritty PS1/early-PS2 inspired art direction
+  using procedural pixel textures (brick, concrete, asphalt, metal, glass, sand,
+  docks and rust), facade windows/doors, rooftop clutter, neon Solana billboards,
+  sidewalks, crosswalks, lane markings, street lamps, traffic lights, dumpsters,
+  hydrants, benches, phone booths, vending machines, cones, crates, barrels and
+  fences. No external asset packs are used.
 - **Drive 5 vehicle types** — sports car, motorcycle, van, truck, electric car,
   each with simple arcade physics.
 - **Randomly generated missions** — deliveries, taxi fares, street races, wallet
@@ -103,6 +109,10 @@ players, rewards and leaderboards persistent and shared across users:
 | `I` | Open inventory |
 | `Esc` | Close any panel |
 
+The HUD includes a **Graphics** switcher (`Low`, `Medium`, `High`) and camera
+zoom controls. Low/Medium emphasize pixelated rendering and reduced DPR for
+slower devices; High keeps the retro atmosphere with sharper rendering.
+
 ---
 
 ## 🗺️ Project structure
@@ -128,6 +138,7 @@ src/
     character/             Character creator
     wallet/                Wallet button + player sync hook
   game/                    Pure simulation (world state, physics, city layout)
+    retroMaterials.ts      Procedural pixel-texture/material cache for the visual style
   lib/                     Types, store (Zustand), economy, missions, db, anti-cheat
 supabase/
   schema.sql               Database schema

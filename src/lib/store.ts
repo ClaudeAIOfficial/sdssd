@@ -15,6 +15,7 @@ import { defaultAppearance } from "./appearance";
 import { STORAGE_KEY } from "./constants";
 
 export type PhoneTab = "map" | "contacts" | "leaderboard" | "wallet" | "missions" | "settings";
+export type GraphicsQuality = "low" | "medium" | "retroHigh";
 
 export interface Notification {
   id: number;
@@ -44,6 +45,7 @@ interface GameState {
   inVehicle: string | null; // vehicle kind label or null
   wanted: number;
   speed: number;
+  cameraZoom: number;
 
   // Missions
   available: Mission[];
@@ -61,6 +63,7 @@ interface GameState {
   nearLandmark: string | null;
   paused: boolean;
   started: boolean;
+  graphicsQuality: GraphicsQuality;
 
   notifications: Notification[];
 
@@ -74,6 +77,7 @@ interface GameState {
 
   setPlayerTelemetry: (t: Partial<Pick<GameState, "playerPos" | "playerHeading" | "inVehicle" | "wanted" | "speed">>) => void;
   setNearLandmark: (id: string | null) => void;
+  setCameraZoom: (zoom: number) => void;
 
   refreshMissions: () => void;
   acceptMission: (id: string) => void;
@@ -94,6 +98,7 @@ interface GameState {
   toggleMap: (open?: boolean) => void;
   setPaused: (p: boolean) => void;
   setStarted: (s: boolean) => void;
+  setGraphicsQuality: (q: GraphicsQuality) => void;
 
   notify: (n: Omit<Notification, "id">) => void;
   dismissNotification: (id: number) => void;
@@ -139,6 +144,7 @@ export const useGame = create<GameState>((set, get) => ({
   inVehicle: null,
   wanted: 0,
   speed: 0,
+  cameraZoom: 1,
 
   available: [],
   active: null,
@@ -152,6 +158,7 @@ export const useGame = create<GameState>((set, get) => ({
   nearLandmark: null,
   paused: false,
   started: false,
+  graphicsQuality: "retroHigh",
 
   notifications: [],
 
@@ -240,6 +247,7 @@ export const useGame = create<GameState>((set, get) => ({
 
   setPlayerTelemetry: (t) => set(() => ({ ...t })),
   setNearLandmark: (id) => set({ nearLandmark: id }),
+  setCameraZoom: (cameraZoom) => set({ cameraZoom: Math.max(0.78, Math.min(1.35, cameraZoom)) }),
 
   refreshMissions: () => set({ available: generateMissions(6) }),
 
@@ -393,6 +401,7 @@ export const useGame = create<GameState>((set, get) => ({
     }),
   setPaused: (paused) => set({ paused }),
   setStarted: (started) => set({ started }),
+  setGraphicsQuality: (graphicsQuality) => set({ graphicsQuality }),
 
   notify: (n) => {
     const id = ++notifId;
