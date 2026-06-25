@@ -32,12 +32,16 @@ const GameCanvas = dynamic(
 
 export default function PlayPage() {
   const hydrate = useGame((s) => s.hydrate);
+  const ensureServerPlayer = useGame((s) => s.ensureServerPlayer);
   const started = useGame((s) => s.started);
   useGameInput();
 
   useEffect(() => {
     hydrate();
-  }, [hydrate]);
+    // Make sure a backend player record exists (guest or wallet) so that mission
+    // completions can be verified and rewarded.
+    void ensureServerPlayer();
+  }, [hydrate, ensureServerPlayer]);
 
   return (
     <main className="relative h-screen w-screen overflow-hidden bg-gts-bg">

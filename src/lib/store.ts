@@ -70,6 +70,7 @@ interface GameState {
   setAppearance: (a: Partial<CharacterAppearance>) => void;
   setWallet: (addr: string | null) => void;
   bindServerPlayer: (p: PlayerProfile) => void;
+  ensureServerPlayer: () => Promise<void>;
 
   setPlayerTelemetry: (t: Partial<Pick<GameState, "playerPos" | "playerHeading" | "inVehicle" | "wanted" | "speed">>) => void;
   setNearLandmark: (id: string | null) => void;
@@ -202,6 +203,39 @@ export const useGame = create<GameState>((set, get) => ({
       },
     }));
     get().persist();
+  },
+
+  ensureServerPlayer: async () => {
+    const s = get();
+    // When a wallet is connected, usePlayerSync owns account creation.
+    if (s.walletAddress) return;
+    // Reuse an existing guest record if the server still knows about it.
+    if (s.profile.id && s.profile.id !== "local") {
+      try {
+        const r = await fetch(`/api/player?id=${encodeURIComponent(s.profile.id)}`);
+        if (r.ok) {
+          const d = (await r.json()) as { player: PlayerProfile };
+          get().bindServerPlayer(d.player);
+          return;
+        }
+      } catch {
+        /* offline: keep local profile */
+      }
+    }
+    // Otherwise create a fresh guest account so missions can be verified.
+    try {
+      const r = await fetch("/api/player", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ wallet: null, handle: s.profile.handle }),
+      });
+      if (r.ok) {
+        const d = (await r.json()) as { player: PlayerProfile };
+        get().bindServerPlayer(d.player);
+      }
+    } catch {
+      /* offline: keep local profile (rewards will be local-only) */
+    }
   },
 
   setPlayerTelemetry: (t) => set(() => ({ ...t })),
