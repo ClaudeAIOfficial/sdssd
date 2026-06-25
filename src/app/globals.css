@@ -1,0 +1,61 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: dark;
+  --font-display: "Inter", system-ui, sans-serif;
+  --font-body: "Inter", system-ui, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  min-height: 100%;
+  margin: 0;
+  background: #090b1f;
+  color: #f8fafc;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+button,
+input,
+select {
+  font: inherit;
+}
+
+.glass {
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  background: linear-gradient(135deg, rgba(15, 23, 42, 0.76), rgba(15, 23, 42, 0.42));
+  box-shadow: 0 20px 80px rgba(0, 0, 0, 0.34);
+  backdrop-filter: blur(22px);
+}
+
+.neon-text {
+  text-shadow:
+    0 0 14px rgba(45, 226, 230, 0.58),
+    0 0 38px rgba(153, 69, 255, 0.36);
+}
+
+.scanline {
+  background-image: linear-gradient(rgba(255, 255, 255, 0.035) 1px, transparent 1px);
+  background-size: 100% 5px;
+}
+
+.wallet-adapter-button {
+  border-radius: 999px !important;
+  background: linear-gradient(135deg, #14f195, #9945ff) !important;
+  color: #07111f !important;
+  font-weight: 800 !important;
+}
+
+.wallet-adapter-modal-wrapper {
+  background: rgba(9, 11, 31, 0.96) !important;
+  color: white !important;
+}

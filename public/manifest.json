@@ -1,0 +1,10 @@
+{
+  "name": "Grand Theft Solana",
+  "short_name": "GTS",
+  "description": "Complete missions. Build your empire. Earn SOL.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#090b1f",
+  "theme_color": "#090b1f",
+  "icons": []
+}
