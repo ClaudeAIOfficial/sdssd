@@ -1,0 +1,103 @@
+@import "tailwindcss";
+@import "@solana/wallet-adapter-react-ui/styles.css";
+
+:root {
+  color-scheme: dark;
+  --background: #060713;
+  --foreground: #f7fbff;
+  --glass: rgba(10, 14, 28, 0.68);
+  --glass-border: rgba(255, 255, 255, 0.14);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  overflow-x: hidden;
+  background:
+    radial-gradient(circle at 20% 10%, rgba(236, 72, 153, 0.22), transparent 28rem),
+    radial-gradient(circle at 80% 0%, rgba(14, 165, 233, 0.24), transparent 32rem),
+    linear-gradient(135deg, #050816 0%, #111827 52%, #03111f 100%);
+  color: var(--foreground);
+  font-family: var(--font-geist-sans), Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+.glass {
+  border: 1px solid var(--glass-border);
+  background: var(--glass);
+  box-shadow: 0 24px 80px rgba(0, 0, 0, 0.32);
+  backdrop-filter: blur(22px);
+}
+
+.neon-text {
+  text-shadow:
+    0 0 10px rgba(34, 211, 238, 0.8),
+    0 0 32px rgba(236, 72, 153, 0.55),
+    0 0 72px rgba(250, 204, 21, 0.28);
+}
+
+.scanlines::after {
+  pointer-events: none;
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  opacity: 0.08;
+  background-image: linear-gradient(rgba(255, 255, 255, 0.16) 1px, transparent 1px);
+  background-size: 100% 4px;
+}
+
+.wallet-adapter-button {
+  border-radius: 999px !important;
+  background: linear-gradient(135deg, #ec4899, #06b6d4) !important;
+  height: 44px !important;
+  font-weight: 800 !important;
+}
+
+.wallet-adapter-dropdown-list {
+  background: rgba(7, 10, 24, 0.96) !important;
+  border: 1px solid rgba(255, 255, 255, 0.12) !important;
+}
+
+@keyframes float-car {
+  0% {
+    transform: translateX(-20vw) translateY(0);
+  }
+  100% {
+    transform: translateX(120vw) translateY(-3vh);
+  }
+}
+
+@keyframes hover-chopper {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) rotate(-3deg);
+  }
+  50% {
+    transform: translate3d(14px, -16px, 0) rotate(4deg);
+  }
+}
+
+@media (max-width: 768px) {
+  body {
+    overscroll-behavior: none;
+  }
+}
