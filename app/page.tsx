@@ -1,6 +1,4 @@
-import dynamic from "next/dynamic";
-
-const GtsApp = dynamic(() => import("@/components/GtsApp"), { ssr: false });
+import GtsApp from "@/components/GtsApp";
 
 export default function Home() {
   return <GtsApp />;

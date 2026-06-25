@@ -137,20 +137,26 @@ function LeaderboardTab() {
         Refresh
       </button>
       <div className="grid gap-3">
-        {(leaderboard.length ? leaderboard : [{ id: "seed", handle: "No verified racers yet", walletAddress: "", reputation: 0, cash: 0, solEarned: 0, missionsCompleted: 0 }]).map((entry, index) => (
-          <div key={entry.id} className="grid grid-cols-[48px_1fr_auto] items-center gap-3 rounded-2xl border border-white/10 bg-white/5 p-4">
-            <div className="text-2xl font-black text-cyan-200">#{index + 1}</div>
-            <div>
-              <div className="font-black text-white">{entry.handle}</div>
-              <div className="text-xs text-slate-400">{entry.walletAddress}</div>
-            </div>
-            <div className="text-right text-sm text-slate-200">
-              <div>{entry.reputation} rep</div>
-              <div>${entry.cash.toLocaleString()} / {entry.solEarned.toFixed(4)} SOL</div>
-              <div>{entry.missionsCompleted} missions</div>
-            </div>
+        {leaderboard.length === 0 ? (
+          <div className="rounded-2xl border border-white/10 bg-white/5 p-5 text-slate-300">
+            No verified racers yet. Complete a mission to become the first leaderboard entry.
           </div>
-        ))}
+        ) : (
+          leaderboard.map((entry, index) => (
+            <div key={entry.id} className="grid grid-cols-[48px_1fr_auto] items-center gap-3 rounded-2xl border border-white/10 bg-white/5 p-4">
+              <div className="text-2xl font-black text-cyan-200">#{index + 1}</div>
+              <div>
+                <div className="font-black text-white">{entry.handle}</div>
+                <div className="text-xs text-slate-400">{entry.walletAddress}</div>
+              </div>
+              <div className="text-right text-sm text-slate-200">
+                <div>{entry.reputation} rep</div>
+                <div>${entry.cash.toLocaleString()} / {entry.solEarned.toFixed(4)} SOL</div>
+                <div>{entry.missionsCompleted} missions</div>
+              </div>
+            </div>
+          ))
+        )}
       </div>
     </div>
   );
@@ -241,7 +247,7 @@ function SettingsTab() {
               <span className="text-sm font-bold capitalize text-white">{group}</span>
               <select
                 value={player?.character[group] ?? characterOptionGroups[group][0]}
-                onChange={(event) => customizeCharacter({ [group]: event.target.value })}
+                onChange={(event) => customizeCharacter({ [group]: event.target.value } as Partial<NonNullable<typeof player>["character"]>)}
                 className="mt-2 w-full rounded-2xl border border-white/10 bg-slate-950 p-3 text-white"
               >
                 {characterOptionGroups[group].map((option) => (

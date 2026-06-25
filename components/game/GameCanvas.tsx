@@ -1,5 +1,7 @@
 "use client";
 
+/* eslint-disable react-hooks/immutability */
+
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import { useEffect, useMemo, useRef } from "react";
 import * as THREE from "three";
@@ -185,7 +187,7 @@ function Traffic() {
       {Array.from({ length: 15 }).map((_, index) => {
         const vehicle = vehicleCatalog[index % vehicleCatalog.length];
         return (
-          <group key={index} ref={(node) => { if (node) refs.current[index] = node; }}>
+          <group key={index} ref={(node: THREE.Group | null) => { if (node) refs.current[index] = node; }}>
             <mesh castShadow position={[0, 0.55, 0]} scale={[1.8, 0.55, 3]}>
               <boxGeometry args={[1, 1, 1]} />
               <meshStandardMaterial color={vehicle.color} roughness={0.42} />
@@ -215,7 +217,7 @@ function NpcCrowds() {
   return (
     <group>
       {Array.from({ length: 24 }).map((_, index) => (
-        <mesh key={index} castShadow ref={(node) => { if (node) refs.current[index] = node; }} position={[0, 0.75, 0]}>
+        <mesh key={index} castShadow ref={(node: THREE.Mesh | null) => { if (node) refs.current[index] = node; }} position={[0, 0.75, 0]}>
           <capsuleGeometry args={[0.3, 0.8, 4, 8]} />
           <meshStandardMaterial color={index % 3 === 0 ? "#f472b6" : index % 3 === 1 ? "#38bdf8" : "#facc15"} />
         </mesh>
@@ -244,7 +246,7 @@ function MissionMarkers() {
   return (
     <group>
       {markers.map((marker, index) => (
-        <mesh key={marker.id} ref={(node) => { if (node) markerRefs.current[index] = node; }} position={[marker.position[0], 1.2, marker.position[1]]}>
+        <mesh key={marker.id} ref={(node: THREE.Mesh | null) => { if (node) markerRefs.current[index] = node; }} position={[marker.position[0], 1.2, marker.position[1]]}>
           <octahedronGeometry args={[1.2]} />
           <meshStandardMaterial color={marker.color} emissive={marker.color} emissiveIntensity={0.75} transparent opacity={0.9} />
         </mesh>
@@ -272,7 +274,7 @@ function PoliceUnits() {
   return (
     <group>
       {Array.from({ length: wantedStars }).map((_, index) => (
-        <group key={index} ref={(node) => { if (node) refs.current[index] = node; }}>
+        <group key={index} ref={(node: THREE.Group | null) => { if (node) refs.current[index] = node; }}>
           <mesh castShadow position={[0, 0.55, 0]} scale={[1.7, 0.6, 2.8]}>
             <boxGeometry args={[1, 1, 1]} />
             <meshStandardMaterial color="#0f172a" emissive="#ef4444" emissiveIntensity={0.18} />

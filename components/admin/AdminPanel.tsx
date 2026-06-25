@@ -1,7 +1,7 @@
 "use client";
 
 import { ArrowLeft, Ban, CheckCircle2, Rocket, Save } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import type { AdminLog, Mission, Player, RewardRecord } from "@/lib/types";
 
 type AdminSnapshot = {
@@ -27,7 +27,7 @@ export function AdminPanel({ onExit }: { onExit: () => void }) {
   const [solEnabled, setSolEnabled] = useState(true);
   const [message, setMessage] = useState("Local admin mode is open unless ADMIN_API_KEY is configured.");
 
-  async function loadSnapshot() {
+  const loadSnapshot = useCallback(async () => {
     const response = await fetch("/api/admin", { headers: adminKey ? { "x-admin-key": adminKey } : undefined });
     if (!response.ok) {
       setMessage("Admin key rejected.");
@@ -37,7 +37,7 @@ export function AdminPanel({ onExit }: { onExit: () => void }) {
     setSnapshot(data);
     setCashMultiplier(data.economy.cashMultiplier);
     setSolEnabled(data.economy.solEnabled);
-  }
+  }, [adminKey]);
 
   async function runAction(payload: Record<string, unknown>) {
     const response = await fetch("/api/admin", {
@@ -51,8 +51,9 @@ export function AdminPanel({ onExit }: { onExit: () => void }) {
   }
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     void loadSnapshot();
-  }, []);
+  }, [loadSnapshot]);
 
   return (
     <main className="min-h-screen bg-slate-950 p-4 text-white sm:p-8">
@@ -172,6 +173,38 @@ export function AdminPanel({ onExit }: { onExit: () => void }) {
                   </button>
                 ))}
               </div>
+            </Panel>
+
+            <Panel title="Mission builder">
+              <p className="mb-4 text-sm text-slate-300">
+                Create a verified courier mission from SolTrust Bank to Ledger Harbor with server-enforced timing and distance rules.
+              </p>
+              <button
+                onClick={() =>
+                  runAction({
+                    type: "createMission",
+                    mission: {
+                      id: "admin-draft",
+                      title: "Admin Courier Surge",
+                      type: "delivery",
+                      district: "Downtown",
+                      briefing: "An admin-spawned courier job is live for connected players.",
+                      objective: "Carry the sealed package from SolTrust Bank to Ledger Harbor.",
+                      start: [8, 10],
+                      target: [34, -28],
+                      minSeconds: 16,
+                      maxSeconds: 170,
+                      requiredDistance: 42,
+                      rewards: { cash: 760, sol: 0.0025, xp: 120, reputation: 17 },
+                      solEligible: true,
+                      status: "available",
+                    },
+                  })
+                }
+                className="inline-flex items-center gap-2 rounded-full bg-pink-300 px-5 py-3 text-sm font-black uppercase tracking-[0.16em] text-slate-950"
+              >
+                <Save className="h-4 w-4" /> Create Mission
+              </button>
             </Panel>
 
             <Panel title="Admin logs">
