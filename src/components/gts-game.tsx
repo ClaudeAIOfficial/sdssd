@@ -3,7 +3,6 @@
 import { Canvas, useFrame } from "@react-three/fiber";
 import { AnimatePresence, motion } from "framer-motion";
 import {
-  Backpack,
   Banknote,
   Car,
   Crown,
@@ -432,12 +431,20 @@ function Hud({ onMissionSound }: { onMissionSound: () => void }) {
   const selectedVehicle = useGameStore((state) => state.selectedVehicle);
   const addWantedStar = useGameStore((state) => state.addWantedStar);
   const [notice, setNotice] = useState("Talk to an NPC or choose a mission to begin.");
+  const [now, setNow] = useState(0);
   const missionDistance = activeMission ? distance(position, activeMission.mission.target) : 0;
+
+  useEffect(() => {
+    if (!activeMission) return;
+    const timer = window.setInterval(() => setNow(Date.now()), 1000);
+    return () => window.clearInterval(timer);
+  }, [activeMission]);
+
   const canRequestVerification =
     !!activeMission &&
     missionDistance < 4.8 &&
     activeMission.distanceTravelled >= activeMission.mission.distanceRequired &&
-    Date.now() - activeMission.startedAt >= activeMission.mission.minDurationSeconds * 1000;
+    now - activeMission.startedAt >= activeMission.mission.minDurationSeconds * 1000;
 
   const verifyMission = async () => {
     if (!activeMission) return;
